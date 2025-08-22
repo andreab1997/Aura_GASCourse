@@ -13,24 +13,27 @@ Saved/Logs/*
 # Visual Studio Generated Files #
 #################################
 # Cache Directory
-*/.vs
+.vs
+.vsconfig
 # User Specific Files
-*/.rsuser
-*/.suo
-*/.user
-*/.userosscache
-*/.sln.docstates
+.rsuser
+.suo
+.user
+.userosscache
+.sln.docstates
 # CPP Cache Files
-*/.VC.db
-*/.opendb
-*/.opensdf
-*/.sdf
+.VC.db
+.opendb
+.opensdf
+.sdf
 # Solution Files
-*/.sln
+*.sln
 # VSCode Cache Directory
-*/.vscode
+.vscode
 # VSCode History Files
-**/.history
+.history
+
+.idea
 
 #################################
 # Miscellaneous Generated Files #
