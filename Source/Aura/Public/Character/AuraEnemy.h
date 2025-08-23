@@ -17,11 +17,17 @@ class AURA_API AAuraEnemy : public AAuraCharacterBase, public IIHighlightable
 
 public:
 	AAuraEnemy();
+	// IIHighlightInterface
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
+	// IIHighlightInterface end
+protected:
+	virtual void BeginPlay() override;
 private:
 /*
  * Utilities
 */
 	void SetActivateCustomDepth(const bool bActive) const;
+	void InitAbilitySystemComponent();
+	void InitializeCustomDepthForHighlight() const;
 };
