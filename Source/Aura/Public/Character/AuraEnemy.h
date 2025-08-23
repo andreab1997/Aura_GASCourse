@@ -23,5 +23,5 @@ private:
 /*
  * Utilities
 */
-	void SetActivateCustomDepth(bool bActive) const;
+	void SetActivateCustomDepth(const bool bActive) const;
 };

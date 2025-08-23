@@ -12,7 +12,7 @@ AAuraEnemy::AAuraEnemy()
 	Weapon->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 }
 
-void AAuraEnemy::SetActivateCustomDepth(bool bActive) const
+void AAuraEnemy::SetActivateCustomDepth(const bool bActive) const
 {
 	GetMesh()->SetRenderCustomDepth(bActive);
 	Weapon->SetRenderCustomDepth(bActive);
