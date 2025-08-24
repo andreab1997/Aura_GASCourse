@@ -3,43 +3,43 @@
 
 #include "Actor/AuraEffectActor.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
-#include "AbilitySystemInterface.h"
-#include "AbilitySystem/AuraAttributeSet.h"
-#include "Components/SphereComponent.h"
+
 
 AAuraEffectActor::AAuraEffectActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	SetRootComponent(Mesh);
-	Sphere = CreateDefaultSubobject<USphereComponent>(FName("Sphere"));
-	Sphere->SetupAttachment(GetRootComponent());
+
+	SetRootComponent(CreateDefaultSubobject<USceneComponent>(TEXT("SceneRoot")));
 }
 
-void AAuraEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	// TODO: Change this to apply a gameplay effect. For now we are using a cast to non const as an hack
-	if (IAbilitySystemInterface* AbilitySystemInterface = Cast<IAbilitySystemInterface>(OtherActor))
-	{
-		const UAuraAttributeSet* AttributeSet = Cast<UAuraAttributeSet>(AbilitySystemInterface->GetAbilitySystemComponent()->GetAttributeSet(UAuraAttributeSet::StaticClass()));
-		UAuraAttributeSet* MutableAuraAttributeSet= const_cast<UAuraAttributeSet*>(AttributeSet);
-		MutableAuraAttributeSet->SetHealth(AttributeSet->GetHealth() + 25.f); // Placeholder
-		MutableAuraAttributeSet->SetMana(AttributeSet->GetMana() - 25.f); // Placeholder
-		Destroy();
-	}
-}
-
-void AAuraEffectActor::EndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-}
 
 void AAuraEffectActor::BeginPlay()
 {
 	Super::BeginPlay();
-	Sphere->OnComponentBeginOverlap.AddDynamic(this, &AAuraEffectActor::OnOverlap);
-	Sphere->OnComponentEndOverlap.AddDynamic(this, &AAuraEffectActor::EndOverlap);
+}
+
+void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
+{
+	UAbilitySystemComponent* TargetAsc = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
+	if (TargetAsc == nullptr) return;
+	
+	check(GameplayEffectClass);
+	// To apply a gameplay effect I need first to produce an effect context handle
+	// An effect context handle is a wrapper for the specific gameplay effect (or one of its subclasses)
+	// We can use it for example to set the source of the gameplay effect, as we do below
+	FGameplayEffectContextHandle GEContextHandle = TargetAsc->MakeEffectContext();
+	GEContextHandle.AddSourceObject(this); // Object that cause the effect
+	
+	// Then, in order to call ApplyGameplayEffectSpecToSelf we need an FGameplayEffectSpec which is
+	// created using the FGameplayEffectContextHandle created above.
+	const FGameplayEffectSpecHandle GESpecHandle = TargetAsc->MakeOutgoingSpec(GameplayEffectClass, 1.f, GEContextHandle);
+	
+	// Finally we can call the following function to apply the effect
+	// There are other versions
+	// Note that we used .Data to get the actual FGameplayEffectSpec from the Handle. This returns a shared_ptr, from which we used Get() to get the
+	// raw pointer. From the raw pointer, to get the required const reference, we dereferenced with *
+	TargetAsc->ApplyGameplayEffectSpecToSelf(*GESpecHandle.Data.Get()); 
 }
 
