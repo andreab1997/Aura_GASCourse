@@ -19,6 +19,8 @@ protected:
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effect")
 	TSubclassOf<UGameplayEffect> InstantGameplayEffectClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effect")
+	TSubclassOf<UGameplayEffect> DurationGameplayEffectClass;
 
 	UFUNCTION(BlueprintCallable, Category = "Applied Effect")
 	void ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass);

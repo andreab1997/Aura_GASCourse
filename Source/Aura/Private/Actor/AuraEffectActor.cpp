@@ -20,6 +20,8 @@ void AAuraEffectActor::BeginPlay()
 	Super::BeginPlay();
 }
 
+
+// Note that this function is kept here mostly for reference and for future usage, as we implemented the same in BPs
 void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
 {
 	UAbilitySystemComponent* TargetAsc = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
