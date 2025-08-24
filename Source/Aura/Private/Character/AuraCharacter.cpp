@@ -5,7 +5,9 @@
 
 #include "AbilitySystemComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/AuraPlayerController.h"
 #include "Player/AuraPlayerState.h"
+#include "UI/HUD/AuraHUD.h"
 
 AAuraCharacter::AAuraCharacter()
 {
@@ -21,6 +23,18 @@ void AAuraCharacter::InitAbilitySystemAndAttributeSet()
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	AbilitySystemComponent->InitAbilityActorInfo(AuraPlayerState, this);
 	AttributeSet = AuraPlayerState->GetAttributeSet();
+
+	AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController());
+	// In this case AuraPlayerController can be null, and it will be null for a multiplayer game, when this function gets the controller of other clients
+	// So we should not crash here, we should just proceed if the controller is non-null which means it is actually our controller
+	if (AuraPlayerController)
+	{
+		AAuraHUD* AuraHUD = Cast<AAuraHUD>(AuraPlayerController->GetHUD());
+		if (AuraHUD)
+		{
+			AuraHUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
+		}
+	}
 }
 
 void AAuraCharacter::PossessedBy(AController* NewController)
