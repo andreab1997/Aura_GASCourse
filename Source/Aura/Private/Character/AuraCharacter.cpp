@@ -13,7 +13,6 @@ AAuraCharacter::AAuraCharacter()
 {
 	InitCharacterMovement();
 	
-	
 }
 
 void AAuraCharacter::InitAbilitySystemAndAttributeSet()
