@@ -30,4 +30,7 @@ private:
 	void SetActivateCustomDepth(const bool bActive) const;
 	void InitAbilitySystemComponent();
 	void InitializeCustomDepthForHighlight() const;
+
+protected:
+	virtual void InitAbilitySystemAndAttributeSet() override;
 };
