@@ -64,6 +64,9 @@ protected:
 	void OnOverlap(AActor* TargetActor);
 	UFUNCTION(BlueprintCallable, Category = "Applied Effect")
 	void OnEndOverlap(AActor* TargetActor);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effect")
+	float ActorLevel = 1.f;
 private:
 	TMap<FActiveGameplayEffectHandle, UAbilitySystemComponent*> InfiniteActiveEffectHandles;
 };

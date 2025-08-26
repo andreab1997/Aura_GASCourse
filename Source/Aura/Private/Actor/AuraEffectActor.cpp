@@ -36,7 +36,7 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGam
 	
 	// Then, in order to call ApplyGameplayEffectSpecToSelf we need an FGameplayEffectSpec which is
 	// created using the FGameplayEffectContextHandle created above.
-	const FGameplayEffectSpecHandle GESpecHandle = TargetAsc->MakeOutgoingSpec(GameplayEffectClass, 1.f, GEContextHandle);
+	const FGameplayEffectSpecHandle GESpecHandle = TargetAsc->MakeOutgoingSpec(GameplayEffectClass, ActorLevel, GEContextHandle);
 	// We can even look at the duration policy
 	bool bIsInfinite = GESpecHandle.Data.Get()->Def.Get()->DurationPolicy == EGameplayEffectDurationType::Infinite;
 
