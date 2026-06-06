@@ -65,7 +65,7 @@ void AAuraPlayerController::MouseTrace()
 	CurrentHighlightableActor = HitResult.GetActor(); //Thanks to the TScriptInterface I do not need a cast here
 
 	/*
-	 * According to the values of PreviousHighlightableActor and CurrentHighlightableActor we may have several scenarios:
+	 * According to the values of PreviousHighlightableActor and CurrentHighlightableActor, we may have 5 scenarios:
 	 *	A. Both NULL:
 	 *		Do nothing
 	 *	B. PreviousHighlightableActor not NULL and CurrentHighlightableActor NULL:

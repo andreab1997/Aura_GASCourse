@@ -8,12 +8,15 @@
 #include "GameplayEffectExtension.h"
 #include "AuraAttributeSet.generated.h"
 
+// These macros generate getter, setters, getter of the attribute itself and initializer automatically for all our attributes
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+
+// Convenient struct to hold data about a gameplay effect
 USTRUCT()
 struct FEffectProperties
 {
@@ -56,9 +59,9 @@ public:
 /*
  * Attributes
  */
-	// In order to set up an attribute, some steps are required. Please use Health attribute as reference
+	// To set up an attribute, some steps are required
 /* Health */
-	UPROPERTY(BlueprintReadOnly, Category="Vital Attributes", ReplicatedUsing = OnRep_Health)
+	UPROPERTY(BlueprintReadOnly, Category="Vital Attributes", ReplicatedUsing = OnRep_Health) // The replicatedUsing meta is needed to replicate the attribute to the clients
 	FGameplayAttributeData Health;
 	UFUNCTION()
 	void OnRep_Health(const FGameplayAttributeData& OldHealth) const;

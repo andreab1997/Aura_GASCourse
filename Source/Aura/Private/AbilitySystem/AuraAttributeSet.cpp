@@ -10,7 +10,7 @@
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
-	// TODO: Change this
+	// TODO: Avoid to hardcode these values
 	InitHealth(50.f);
 	InitMaxHealth(100.f);
 	InitMana(50.f);
@@ -29,7 +29,7 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimePropert
 void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
 	Super::PreAttributeChange(Attribute, NewValue);
-
+	// This function is called BEFORE an attribute is about to change
 	// Clamp Health and Mana to max
 	if (Attribute == GetHealthAttribute())
 		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHealth());
@@ -41,13 +41,15 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 {
 	Super::PostGameplayEffectExecute(Data);
 
-	// Data contains the info about the attribute that has been changed for example
+	// Data contains the info about the attribute that has been changed, for example,
 	// We collect here some info that we will use later on
 	// This is also to show how to get different information from this struct
 	FEffectProperties EffectProperties;
+	
+	// Here we basically use the info in Data to fill our own struct 
 	SetEffectProperties(Data, EffectProperties);
 
-	// Clamping again to account for effect that apply later preAttributeChange
+	// Clamping again to account for effects that apply later preAttributeChange
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
 	if (Data.EvaluatedData.Attribute == GetManaAttribute())

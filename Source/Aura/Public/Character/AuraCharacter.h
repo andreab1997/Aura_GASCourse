@@ -23,7 +23,7 @@ private:
  * Utilities
 */
 	void InitCharacterMovement();
-	void InitAbilitySystemAndAttributeSet() override;
+	virtual void InitAbilitySystemAndAttributeSet() override;
 	
 	
 };

@@ -12,11 +12,12 @@ void AAuraEnemy::InitAbilitySystemComponent()
 {
 	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
-	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal); // Minimal is ok for enemies, but not for the player
 }
 
 void AAuraEnemy::InitializeCustomDepthForHighlight() const
 {
+	// Setup for the highlighting
 	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 	Weapon->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
@@ -38,6 +39,7 @@ AAuraEnemy::AAuraEnemy()
 
 void AAuraEnemy::SetActivateCustomDepth(const bool bActive) const
 {
+	// This is called when it is necessary to highlight the character
 	GetMesh()->SetRenderCustomDepth(bActive);
 	Weapon->SetRenderCustomDepth(bActive);
 }

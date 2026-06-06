@@ -45,7 +45,7 @@ private:
 /*
  * MouseTrace hits
 */
-	// I could have used raw pointers but using TScriptInterface wrapper for interface objects is better
+	// I could have used raw pointers, but using TScriptInterface wrapper for interface objects is better
 	TScriptInterface<IIHighlightable> CurrentHighlightableActor;
 	TScriptInterface<IIHighlightable> PreviousHighlightableActor;
 /*

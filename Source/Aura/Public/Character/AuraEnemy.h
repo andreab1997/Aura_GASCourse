@@ -11,7 +11,7 @@
  * 
  */
 UCLASS()
-class AURA_API AAuraEnemy : public AAuraCharacterBase, public IIHighlightable
+class AURA_API AAuraEnemy : public AAuraCharacterBase, public IIHighlightable // interface to highlight characters in the viewport
 {
 	GENERATED_BODY()
 
