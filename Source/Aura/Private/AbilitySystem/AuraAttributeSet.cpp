@@ -8,12 +8,6 @@
 #include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
 
-UAuraAttributeSet::UAuraAttributeSet()
-{
-	// TODO: Avoid to hardcode these values
-	InitHealth(50.f);
-	InitMana(50.f);
-}
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {
