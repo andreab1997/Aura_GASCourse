@@ -65,24 +65,14 @@ public:
 	UFUNCTION()
 	void OnRep_Health(const FGameplayAttributeData& OldHealth) const;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Health);
-/* Max Health */
-	UPROPERTY(BlueprintReadOnly, Category="Vital Attributes", ReplicatedUsing = OnRep_MaxHealth)
-	FGameplayAttributeData MaxHealth;
-	UFUNCTION()
-	void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth) const;
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxHealth);
 /* Mana */
-	UPROPERTY(BlueprintReadOnly, Category="Vital Attributes", ReplicatedUsing = OnRep_Mana)
+	UPROPERTY(BlueprintReadOnly, Category="Secondary Attributes", ReplicatedUsing = OnRep_Mana)
 	FGameplayAttributeData Mana;
 	UFUNCTION()
 	void OnRep_Mana(const FGameplayAttributeData& OldMana) const;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Mana);
-/* Max Mana */
-	UPROPERTY(BlueprintReadOnly, Category="Vital Attributes", ReplicatedUsing = OnRep_MaxMana)
-	FGameplayAttributeData MaxMana;
-	UFUNCTION()
-	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxMana);
+
+
 	
 /*
  * Primary Attributes
@@ -111,6 +101,71 @@ public:
 	UFUNCTION()
 	void OnRep_Vigor(const FGameplayAttributeData& OldVigor) const;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Vigor);
+
+/*
+ * Secondary Attributes
+ */
+	/* Armor */
+	UPROPERTY(BlueprintReadOnly, Category="Secondary Attributes", ReplicatedUsing = OnRep_Armor) // The replicatedUsing meta is needed to replicate the attribute to the clients
+	FGameplayAttributeData Armor;
+	UFUNCTION()
+	void OnRep_Armor(const FGameplayAttributeData& OldArmor) const;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Armor);
+	/* ArmorPenetration */
+	UPROPERTY(BlueprintReadOnly, Category="Secondary Attributes", ReplicatedUsing = OnRep_ArmorPenetration) // The replicatedUsing meta is needed to replicate the attribute to the clients
+	FGameplayAttributeData ArmorPenetration;
+	UFUNCTION()
+	void OnRep_ArmorPenetration(const FGameplayAttributeData& OldArmorPenetration) const;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, ArmorPenetration);
+	/* BlockChance */
+	UPROPERTY(BlueprintReadOnly, Category="Secondary Attributes", ReplicatedUsing = OnRep_BlockChance) // The replicatedUsing meta is needed to replicate the attribute to the clients
+	FGameplayAttributeData BlockChance;
+	UFUNCTION()
+	void OnRep_BlockChance(const FGameplayAttributeData& OldBlockChance) const;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, BlockChance);
+	/* CriticalHitChance */
+	UPROPERTY(BlueprintReadOnly, Category="Secondary Attributes", ReplicatedUsing = OnRep_CriticalHitChance) // The replicatedUsing meta is needed to replicate the attribute to the clients
+	FGameplayAttributeData CriticalHitChance;
+	UFUNCTION()
+	void OnRep_CriticalHitChance(const FGameplayAttributeData& OldCriticalHitChance) const;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, CriticalHitChance);
+	/* CriticalHitDamage */
+	UPROPERTY(BlueprintReadOnly, Category="Secondary Attributes", ReplicatedUsing = OnRep_CriticalHitDamage) // The replicatedUsing meta is needed to replicate the attribute to the clients
+	FGameplayAttributeData CriticalHitDamage;
+	UFUNCTION()
+	void OnRep_CriticalHitDamage(const FGameplayAttributeData& OldCriticalHitDamage) const;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, CriticalHitDamage);
+	/* CriticalHitResistance */
+	UPROPERTY(BlueprintReadOnly, Category="Secondary Attributes", ReplicatedUsing = OnRep_CriticalHitResistance) // The replicatedUsing meta is needed to replicate the attribute to the clients
+	FGameplayAttributeData CriticalHitResistance;
+	UFUNCTION()
+	void OnRep_CriticalHitResistance(const FGameplayAttributeData& OldCriticalHitResistance) const;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, CriticalHitResistance);
+	/* HealthRegeneration */
+	UPROPERTY(BlueprintReadOnly, Category="Secondary Attributes", ReplicatedUsing = OnRep_HealthRegeneration) // The replicatedUsing meta is needed to replicate the attribute to the clients
+	FGameplayAttributeData HealthRegeneration;
+	UFUNCTION()
+	void OnRep_HealthRegeneration(const FGameplayAttributeData& OldHealthRegeneration) const;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, HealthRegeneration);
+	/* ManaRegeneration */
+	UPROPERTY(BlueprintReadOnly, Category="Secondary Attributes", ReplicatedUsing = OnRep_ManaRegeneration) // The replicatedUsing meta is needed to replicate the attribute to the clients
+	FGameplayAttributeData ManaRegeneration;
+	UFUNCTION()
+	void OnRep_ManaRegeneration(const FGameplayAttributeData& OldManaRegeneration) const;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, ManaRegeneration);
+	/* Max Health */
+	UPROPERTY(BlueprintReadOnly, Category="Secondary Attributes", ReplicatedUsing = OnRep_MaxHealth)
+	FGameplayAttributeData MaxHealth;
+	UFUNCTION()
+	void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth) const;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxHealth);
+	/* Max Mana */
+	UPROPERTY(BlueprintReadOnly, Category="Secondary Attributes", ReplicatedUsing = OnRep_MaxMana)
+	FGameplayAttributeData MaxMana;
+	UFUNCTION()
+	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxMana);
+
 private:
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 };

@@ -46,7 +46,7 @@ void AAuraCharacter::InitAbilitySystemAndAttributeSet()
 
 	InitializeHUDOverlay(AuraPlayerState);
 	
-	InitializePrimaryAttributes();
+	InitializeDefaultAttributes();
 }
 
 void AAuraCharacter::PossessedBy(AController* NewController)
