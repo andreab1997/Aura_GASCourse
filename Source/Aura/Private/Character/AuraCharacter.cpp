@@ -16,6 +16,21 @@ AAuraCharacter::AAuraCharacter()
 	
 }
 
+void AAuraCharacter::InitializeHUDOverlay(AAuraPlayerState* AuraPlayerState)
+{
+	AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController());
+	// In this case AuraPlayerController can be null. It will be null for a multiplayer game, when this function gets the controller of other clients,
+	// So we should not crash here, we should just proceed if the controller is non-null, which means it is actually our controller
+	if (AuraPlayerController)
+	{
+		AAuraHUD* AuraHUD = Cast<AAuraHUD>(AuraPlayerController->GetHUD());
+		if (AuraHUD)
+		{
+			AuraHUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
+		}
+	}
+}
+
 void AAuraCharacter::InitAbilitySystemAndAttributeSet()
 {
 	// In this case the aura avatar actor does not own the AbilitySystemComponent, because it is the PlayerState to own it
@@ -29,17 +44,9 @@ void AAuraCharacter::InitAbilitySystemAndAttributeSet()
 	
 	AttributeSet = AuraPlayerState->GetAttributeSet();
 
-	AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController());
-	// In this case AuraPlayerController can be null. It will be null for a multiplayer game, when this function gets the controller of other clients,
-	// So we should not crash here, we should just proceed if the controller is non-null, which means it is actually our controller
-	if (AuraPlayerController)
-	{
-		AAuraHUD* AuraHUD = Cast<AAuraHUD>(AuraPlayerController->GetHUD());
-		if (AuraHUD)
-		{
-			AuraHUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
-		}
-	}
+	InitializeHUDOverlay(AuraPlayerState);
+	
+	InitializePrimaryAttributes();
 }
 
 void AAuraCharacter::PossessedBy(AController* NewController)

@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
 #include "AttributeSet.h"
-#include "GameplayEffectExtension.h"
 #include "AuraAttributeSet.generated.h"
 
 // These macros generate getter, setters, getter of the attribute itself and initializer automatically for all our attributes
@@ -57,9 +56,9 @@ public:
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
 /*
- * Attributes
+ * Vital Attributes
  */
-	// To set up an attribute, some steps are required
+	
 /* Health */
 	UPROPERTY(BlueprintReadOnly, Category="Vital Attributes", ReplicatedUsing = OnRep_Health) // The replicatedUsing meta is needed to replicate the attribute to the clients
 	FGameplayAttributeData Health;
@@ -84,6 +83,34 @@ public:
 	UFUNCTION()
 	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxMana);
+	
+/*
+ * Primary Attributes
+ */
+/* STR */
+	UPROPERTY(BlueprintReadOnly, Category="Primary Attributes", ReplicatedUsing = OnRep_Strength) // The replicatedUsing meta is needed to replicate the attribute to the clients
+	FGameplayAttributeData Strength;
+	UFUNCTION()
+	void OnRep_Strength(const FGameplayAttributeData& OldStrength) const;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Strength);
+/* Intelligence */
+	UPROPERTY(BlueprintReadOnly, Category="Primary Attributes", ReplicatedUsing = OnRep_Intelligence) // The replicatedUsing meta is needed to replicate the attribute to the clients
+	FGameplayAttributeData Intelligence;
+	UFUNCTION()
+	void OnRep_Intelligence(const FGameplayAttributeData& OldIntelligence) const;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Intelligence);
+/* Resilience */
+	UPROPERTY(BlueprintReadOnly, Category="Primary Attributes", ReplicatedUsing = OnRep_Resilience) // The replicatedUsing meta is needed to replicate the attribute to the clients
+	FGameplayAttributeData Resilience;
+	UFUNCTION()
+	void OnRep_Resilience(const FGameplayAttributeData& OldResilience) const;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Resilience);
+/* Vigor */
+	UPROPERTY(BlueprintReadOnly, Category="Primary Attributes", ReplicatedUsing = OnRep_Vigor) // The replicatedUsing meta is needed to replicate the attribute to the clients
+	FGameplayAttributeData Vigor;
+	UFUNCTION()
+	void OnRep_Vigor(const FGameplayAttributeData& OldVigor) const;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Vigor);
 private:
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 };
