@@ -65,6 +65,13 @@ void AAuraCharacter::OnRep_PlayerState()
 	InitAbilitySystemAndAttributeSet();
 }
 
+int32 AAuraCharacter::GetPlayerLevel()
+{
+	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+	return AuraPlayerState->GetPlayerLevel();
+}
+
 void AAuraCharacter::InitCharacterMovement()
 {
 	//TODO: avoid to hardcode the Yaw rotation rate

@@ -62,3 +62,8 @@ void AAuraEnemy::UnHighlightActor()
 	SetActivateCustomDepth(false);
 }
 
+int32 AAuraEnemy::GetPlayerLevel()
+{
+	return Level;
+}
+
