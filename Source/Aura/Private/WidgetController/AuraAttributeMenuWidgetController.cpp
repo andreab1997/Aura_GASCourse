@@ -13,25 +13,30 @@ void UAuraAttributeMenuWidgetController::BroadcastInitialValues()
 	
 	for (auto& Pair : AuraAttributeSet->TagsToAttribute)
 	{
-		FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key);
-		Info.AttributeValue = Pair.Value().GetNumericValue(AuraAttributeSet);
-		AttributeInfoDelegate.Broadcast(Info);
+		BroadcastAttributeInfo(Pair.Key, Pair.Value());
 	}
 }
 
 void UAuraAttributeMenuWidgetController::BindCallbacksToDependecies()
 {
 	UAuraAttributeSet* AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet);
+	check(AttributeInfo);
 	for (auto& Pair : AuraAttributeSet->TagsToAttribute)
 	{
 		FGameplayAttribute GameplayAttribute = Pair.Value();
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GameplayAttribute).AddLambda(
-		[this, Pair, GameplayAttribute, AuraAttributeSet](const FOnAttributeChangeData& Data)
+		[this, Pair, GameplayAttribute](const FOnAttributeChangeData& Data)
 		{
-			FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key);
-			Info.AttributeValue = GameplayAttribute.GetNumericValue(AuraAttributeSet);
-			AttributeInfoDelegate.Broadcast(Info);
+			BroadcastAttributeInfo(Pair.Key, GameplayAttribute);
 		}
 		);
 	}
+}
+
+void UAuraAttributeMenuWidgetController::BroadcastAttributeInfo(const FGameplayTag& AttributeTag,
+	const FGameplayAttribute& Attribute) const
+{
+	FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(AttributeTag);
+	Info.AttributeValue = Attribute.GetNumericValue(AttributeSet);
+	AttributeInfoDelegate.Broadcast(Info);
 }
