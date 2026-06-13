@@ -5,6 +5,10 @@
 #include "CoreMinimal.h"
 #include "AuraWidgetController.h"
 #include "AuraAttributeMenuWidgetController.generated.h"
+class UAttributeInfo;
+struct FAuraAttributeInfo;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAttributeinfoSignature, const FAuraAttributeInfo&, Info);
 
 /**
  * 
@@ -17,4 +21,11 @@ class AURA_API UAuraAttributeMenuWidgetController : public UAuraWidgetController
 public:
 	virtual void BroadcastInitialValues() override;
 	virtual void BindCallbacksToDependecies() override;
+	
+	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
+	FAttributeinfoSignature AttributeInfoDelegate;
+	
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UAttributeInfo> AttributeInfo;
 };
