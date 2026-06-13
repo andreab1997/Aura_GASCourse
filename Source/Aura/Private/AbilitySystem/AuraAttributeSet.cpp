@@ -14,14 +14,15 @@ UAuraAttributeSet::UAuraAttributeSet()
 {
 	const FAuraGameplayTags GameplayTags = FAuraGameplayTags::Get();
 	
+	// Vital
 	TagsToAttribute.Add(GameplayTags.Attributes_Vital_Health, GetHealthAttribute);
 	TagsToAttribute.Add(GameplayTags.Attributes_Vital_Mana, GetManaAttribute);
-
+	// Primary
 	TagsToAttribute.Add(GameplayTags.Attributes_Primary_Strength, GetStrengthAttribute);
 	TagsToAttribute.Add(GameplayTags.Attributes_Primary_Intelligence, GetIntelligenceAttribute);
 	TagsToAttribute.Add(GameplayTags.Attributes_Primary_Resilience, GetResilienceAttribute);
 	TagsToAttribute.Add(GameplayTags.Attributes_Primary_Vigor, GetVigorAttribute);
-
+	// Secondary
 	TagsToAttribute.Add(GameplayTags.Attributes_Secondary_Armor, GetArmorAttribute);
 	TagsToAttribute.Add(GameplayTags.Attributes_Secondary_ArmorPenetration, GetArmorPenetrationAttribute);
 	TagsToAttribute.Add(GameplayTags.Attributes_Secondary_BlockChance, GetBlockChanceAttribute);

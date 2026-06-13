@@ -21,5 +21,17 @@ void UAuraAttributeMenuWidgetController::BroadcastInitialValues()
 
 void UAuraAttributeMenuWidgetController::BindCallbacksToDependecies()
 {
-	
+	UAuraAttributeSet* AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet);
+	for (auto& Pair : AuraAttributeSet->TagsToAttribute)
+	{
+		FGameplayAttribute GameplayAttribute = Pair.Value();
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GameplayAttribute).AddLambda(
+		[this, Pair, GameplayAttribute, AuraAttributeSet](const FOnAttributeChangeData& Data)
+		{
+			FAuraAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key);
+			Info.AttributeValue = GameplayAttribute.GetNumericValue(AuraAttributeSet);
+			AttributeInfoDelegate.Broadcast(Info);
+		}
+		);
+	}
 }
