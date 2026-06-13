@@ -14,7 +14,6 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
-
 // Convenient struct to hold data about a gameplay effect
 USTRUCT()
 struct FEffectProperties
@@ -44,6 +43,10 @@ struct FEffectProperties
 	
 };
 
+// Here we make a template to allow having something more general, but really the T here will be FGameplayAttribute for our means
+template<class T>
+using TStaticFuncPointer = typename TBaseStaticDelegateInstance<T, FDefaultDelegateUserPolicy>::FFuncPtr;
+
 UCLASS()
 class AURA_API UAuraAttributeSet : public UAttributeSet
 {
@@ -51,10 +54,12 @@ private:
 	GENERATED_BODY()
 
 public:
-	UAuraAttributeSet() = default;
+	UAuraAttributeSet();
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
+	
+	TMap<FGameplayTag, TStaticFuncPointer<FGameplayAttribute()>> TagsToAttribute;
 /*
  * Vital Attributes
  */
