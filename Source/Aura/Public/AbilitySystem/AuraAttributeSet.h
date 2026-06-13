@@ -77,7 +77,7 @@ public:
 /*
  * Primary Attributes
  */
-/* STR */
+/* Strength */
 	UPROPERTY(BlueprintReadOnly, Category="Primary Attributes", ReplicatedUsing = OnRep_Strength) // The replicatedUsing meta is needed to replicate the attribute to the clients
 	FGameplayAttributeData Strength;
 	UFUNCTION()
