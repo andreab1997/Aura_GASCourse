@@ -14,6 +14,18 @@ void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
 }
 
+
+void UAuraAbilitySystemComponent::AddCharacterStartupAbilities(
+	const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities)
+{
+	for (const TSubclassOf<UGameplayAbility> AbilityClass : StartupAbilities)
+	{
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1.f);
+		//GiveAbility(AbilitySpec);
+		GiveAbilityAndActivateOnce(AbilitySpec);
+	}
+}
+
 void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent,
                                                 const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)
 {

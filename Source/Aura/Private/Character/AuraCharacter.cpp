@@ -55,6 +55,7 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 	// when this function is called, it is a good moment to init the ASC and AttributeSet on the server
 	// Init ability actor info for the server here
 	InitAbilitySystemAndAttributeSet();
+	AddCharacterStartupAbilities();
 }
 
 void AAuraCharacter::OnRep_PlayerState()
