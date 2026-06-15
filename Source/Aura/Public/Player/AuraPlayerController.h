@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "GameFramework/PlayerController.h"
 #include "AuraPlayerController.generated.h"
 
+class UAuraInputConfig;
 class IIHighlightable;
 struct FInputActionValue;
 class UInputMappingContext;
@@ -55,4 +57,14 @@ private:
 	void MouseTrace();
 	ETraceCase CheckTraceCase() const;
 	void HandleTraceCases(ETraceCase TraceCase) const;
+	
+/*
+ *Abilities
+ */
+	void AbilityInputTagPressed(const FGameplayTag InputTag);
+	void AbilityInputTagReleased(const FGameplayTag InputTag);
+	void AbilityInputTagHeld(const FGameplayTag InputTag);
+	
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	TObjectPtr<UAuraInputConfig> InputConfig;
 };

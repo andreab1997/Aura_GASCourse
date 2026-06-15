@@ -3,8 +3,8 @@
 
 #include "Player/AuraPlayerController.h"
 
-#include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Input/AuraInputComponent.h"
 #include "Interactions/IHighlightable.h"
 
 
@@ -56,6 +56,30 @@ void AAuraPlayerController::HandleTraceCases(ETraceCase TraceCase) const
 	}
 }
 
+void AAuraPlayerController::AbilityInputTagPressed(const FGameplayTag InputTag)
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, InputTag.ToString());
+	}
+}
+
+void AAuraPlayerController::AbilityInputTagReleased(const FGameplayTag InputTag)
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(2, 3.f, FColor::Blue, InputTag.ToString());
+	}
+}
+
+void AAuraPlayerController::AbilityInputTagHeld(const FGameplayTag InputTag)
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Green, InputTag.ToString());
+	}
+}
+
 void AAuraPlayerController::MouseTrace()
 {
 	FHitResult HitResult;
@@ -103,8 +127,9 @@ void AAuraPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+	UAuraInputComponent* AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
+	AuraInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+	AuraInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
 
 FVector AAuraPlayerController::GetRelativeVector(const EAxis::Type Axis) const
