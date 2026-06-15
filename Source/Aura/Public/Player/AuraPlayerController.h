@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "AuraPlayerController.generated.h"
 
+class UAuraAbilitySystemComponent;
 class UAuraInputConfig;
 class IIHighlightable;
 struct FInputActionValue;
@@ -36,6 +37,11 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, Category=Input)
 	TObjectPtr<UInputMappingContext> AuraContext;
+	
+	UPROPERTY()
+	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent;
+	
+	UAuraAbilitySystemComponent* GetASC();
 	
 /*
  * Movement Input

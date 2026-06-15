@@ -3,7 +3,9 @@
 
 #include "Player/AuraPlayerController.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystems.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Input/AuraInputComponent.h"
 #include "Interactions/IHighlightable.h"
 
@@ -58,26 +60,19 @@ void AAuraPlayerController::HandleTraceCases(ETraceCase TraceCase) const
 
 void AAuraPlayerController::AbilityInputTagPressed(const FGameplayTag InputTag)
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, InputTag.ToString());
-	}
+
 }
 
 void AAuraPlayerController::AbilityInputTagReleased(const FGameplayTag InputTag)
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(2, 3.f, FColor::Blue, InputTag.ToString());
-	}
+	if (GetASC() == nullptr) return;
+		GetASC()->AbilityInputTagReleased(InputTag);
 }
 
 void AAuraPlayerController::AbilityInputTagHeld(const FGameplayTag InputTag)
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Green, InputTag.ToString());
-	}
+	if (GetASC() == nullptr) return;
+		GetASC()->AbilityInputTagHeld(InputTag);
 }
 
 void AAuraPlayerController::MouseTrace()
@@ -96,7 +91,7 @@ void AAuraPlayerController::MouseTrace()
 	 *		Unhighlight PreviousHighlightableActor
 	 *	C. PreviousHighlightableActor NULL and CurrentHighlightableActor not NULL:
 	 *		Highlight CurrentHighlightableActor
-	 *	D. PreviousHighlightableActor not NULL and CurrentHighlightableActor not NULL, but they are different:
+	 *	D. PreviousHighlightableActor not NULL, and CurrentHighlightableActor not NULL, but they are different:
 	 *		Highlight CurrentHighlightableActor, UnHighlight PreviousHighlightableActor
 	 *	E. PreviousHighlightableActor not NULL and CurrentHighlightableActor not NULL, and they are the same:
 	 *		Do Nothing
@@ -137,6 +132,15 @@ FVector AAuraPlayerController::GetRelativeVector(const EAxis::Type Axis) const
 	const FRotator YawRotation = FRotator(0.f, GetControlRotation().Yaw, 0.f);
 	const FVector Vector = FRotationMatrix(YawRotation).GetUnitAxis(Axis);
 	return Vector;
+}
+
+UAuraAbilitySystemComponent* AAuraPlayerController::GetASC()
+{
+	if (AuraAbilitySystemComponent == nullptr)
+	{
+		AuraAbilitySystemComponent = Cast<UAuraAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn<APawn>()));
+	}
+	return AuraAbilitySystemComponent;
 }
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
