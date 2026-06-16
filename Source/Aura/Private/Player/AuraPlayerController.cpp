@@ -97,10 +97,7 @@ void AAuraPlayerController::AbilityInputTagReleased(const FGameplayTag InputTag)
 		GetASC()->AbilityInputTagReleased(InputTag);
 		return;
 	}
-	if (bTargeting)
-	{
-		GetASC()->AbilityInputTagReleased(InputTag);
-	}
+	if (bTargeting) GetASC()->AbilityInputTagReleased(InputTag);
 	else
 	{
 		if (const APawn* ControlledPawn = GetPawn<APawn>(); FollowTime <= ShortPressedThreshold && ControlledPawn)
@@ -111,11 +108,7 @@ void AAuraPlayerController::AbilityInputTagReleased(const FGameplayTag InputTag)
 				CachedDestination))
 			{
 				Spline->ClearSplinePoints();
-				for (const FVector& PointLoc : NavPath->PathPoints)
-				{
-					Spline->AddSplinePoint(PointLoc, ESplineCoordinateSpace::World);
-					DrawDebugSphere(GetWorld(), PointLoc, 8.f, 8, FColor::Green, false, 5.f);
-				}
+				for (const FVector& PointLoc : NavPath->PathPoints) Spline->AddSplinePoint(PointLoc, ESplineCoordinateSpace::World);
 				CachedDestination = NavPath->PathPoints.Last();
 				bAutoRunning = true;
 			}
@@ -133,19 +126,12 @@ void AAuraPlayerController::AbilityInputTagHeld(const FGameplayTag InputTag)
 		GetASC()->AbilityInputTagHeld(InputTag);
 		return;
 	}
-	if (bTargeting)
-	{
-		GetASC()->AbilityInputTagHeld(InputTag);
-	}
+	if (bTargeting) GetASC()->AbilityInputTagHeld(InputTag);
 	else
 	{
 		FollowTime += GetWorld()->GetDeltaSeconds();
 		
-		FHitResult HitResult;
-		if (GetHitResultUnderCursor(ECC_Visibility, false, HitResult))
-		{
-			CachedDestination = HitResult.ImpactPoint;
-		}
+		if (HitResult.bBlockingHit) CachedDestination = HitResult.ImpactPoint;
 		if (APawn* ControlledPawn = GetPawn<APawn>())
 		{
 			const FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
@@ -156,7 +142,6 @@ void AAuraPlayerController::AbilityInputTagHeld(const FGameplayTag InputTag)
 
 void AAuraPlayerController::MouseTrace()
 {
-	FHitResult HitResult;
 	GetHitResultUnderCursor(ECC_Visibility, false, HitResult);
 	if (!HitResult.bBlockingHit) return;
 	PreviousHighlightableActor = CurrentHighlightableActor;
@@ -175,7 +160,7 @@ void AAuraPlayerController::MouseTrace()
 	 *	E. PreviousHighlightableActor not NULL and CurrentHighlightableActor not NULL, and they are the same:
 	 *		Do Nothing
 	 */
-	ETraceCase TraceCase = CheckTraceCase();
+	const ETraceCase TraceCase = CheckTraceCase();
 	HandleTraceCases(TraceCase);
 }
 

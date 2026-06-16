@@ -66,6 +66,8 @@ private:
 	ETraceCase CheckTraceCase() const;
 	void HandleTraceCases(ETraceCase TraceCase) const;
 	
+	FHitResult HitResult;
+	
 /*
  *Abilities
  */

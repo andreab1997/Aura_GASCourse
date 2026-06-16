@@ -10,7 +10,7 @@ void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 {
 	// we attach to this event only when we are sure the ASC is set up correctly.
 	// This event is called when a gameplay effect is applied on this ASC
-	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UAuraAbilitySystemComponent::EffectApplied);
+	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UAuraAbilitySystemComponent::ClientEffectApplied);
 	
 }
 
@@ -59,7 +59,7 @@ void UAuraAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& In
 	}
 }
 
-void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent,
+void UAuraAbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent,
                                                 const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle) const
 {
 	// we get all asset tags related to the effect spec that has been activated, and we broadcast them using our delegate
