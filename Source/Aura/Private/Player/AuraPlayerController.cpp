@@ -6,6 +6,8 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AuraGameplayTags.h"
 #include "EnhancedInputSubsystems.h"
+#include "NavigationPath.h"
+#include "NavigationSystem.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Components/SplineComponent.h"
 #include "Input/AuraInputComponent.h"
@@ -19,11 +21,27 @@ AAuraPlayerController::AAuraPlayerController()
 	Spline = CreateDefaultSubobject<USplineComponent>("Spline");
 }
 
+void AAuraPlayerController::AutoRun()
+{
+	if (APawn* ControlledPawn = GetPawn<APawn>(); ControlledPawn && bAutoRunning)
+	{
+		const FVector LocationOnSpline = Spline->FindLocationClosestToWorldLocation(ControlledPawn->GetActorLocation(), ESplineCoordinateSpace::World);
+		const FVector Direction = Spline->FindDirectionClosestToWorldLocation(LocationOnSpline, ESplineCoordinateSpace::World);
+		ControlledPawn->AddMovementInput(Direction);
+		const float DistanceToDestination = (LocationOnSpline - CachedDestination).Length();
+		if (DistanceToDestination <= AutoRunAcceptanceRadius)
+		{
+			bAutoRunning = false;
+		}
+	}
+}
+
 void AAuraPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
 	MouseTrace();
+	AutoRun();
 }
 
 ETraceCase AAuraPlayerController::CheckTraceCase() const
@@ -74,7 +92,36 @@ void AAuraPlayerController::AbilityInputTagPressed(const FGameplayTag InputTag)
 void AAuraPlayerController::AbilityInputTagReleased(const FGameplayTag InputTag)
 {
 	if (GetASC() == nullptr) return;
+	if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
+	{
 		GetASC()->AbilityInputTagReleased(InputTag);
+		return;
+	}
+	if (bTargeting)
+	{
+		GetASC()->AbilityInputTagReleased(InputTag);
+	}
+	else
+	{
+		if (const APawn* ControlledPawn = GetPawn<APawn>(); FollowTime <= ShortPressedThreshold && ControlledPawn)
+		{
+			if (const UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(
+				this, 
+				ControlledPawn->GetActorLocation(),
+				CachedDestination))
+			{
+				Spline->ClearSplinePoints();
+				for (const FVector& PointLoc : NavPath->PathPoints)
+				{
+					Spline->AddSplinePoint(PointLoc, ESplineCoordinateSpace::World);
+					DrawDebugSphere(GetWorld(), PointLoc, 8.f, 8, FColor::Green, false, 5.f);
+				}
+				bAutoRunning = true;
+			}
+		}
+		FollowTime = 0.f;
+		bTargeting = false;
+	}
 }
 
 void AAuraPlayerController::AbilityInputTagHeld(const FGameplayTag InputTag)
