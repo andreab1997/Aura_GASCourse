@@ -5,10 +5,13 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "Components/CapsuleComponent.h"
 
 AAuraCharacterBase::AAuraCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	// the weapon is a skeletalMeshComponent and it is attached to a specific socket
 	// TODO: avoid to hardcode the name of the socket
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(FName("Weapon"));

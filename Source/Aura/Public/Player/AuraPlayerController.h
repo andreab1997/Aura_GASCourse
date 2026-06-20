@@ -78,6 +78,13 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	TObjectPtr<UAuraInputConfig> InputConfig;
 	
+	UPROPERTY(EditAnywhere, Category=Input)
+	TObjectPtr<UInputAction> ShiftAction;
+	
+	void ShiftPressed();
+	void ShiftReleased();
+	bool bShiftPressed = false;
+	
 // Click to move variables
 	FVector CachedDestination = FVector::ZeroVector;
 	float FollowTime = 0.f;

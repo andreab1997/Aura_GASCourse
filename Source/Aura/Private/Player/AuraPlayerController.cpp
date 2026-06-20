@@ -97,8 +97,8 @@ void AAuraPlayerController::AbilityInputTagReleased(const FGameplayTag InputTag)
 		GetASC()->AbilityInputTagReleased(InputTag);
 		return;
 	}
-	if (bTargeting) GetASC()->AbilityInputTagReleased(InputTag);
-	else
+	GetASC()->AbilityInputTagReleased(InputTag);
+	if (!bTargeting && !bShiftPressed)
 	{
 		if (const APawn* ControlledPawn = GetPawn<APawn>(); FollowTime <= ShortPressedThreshold && ControlledPawn)
 		{
@@ -126,7 +126,10 @@ void AAuraPlayerController::AbilityInputTagHeld(const FGameplayTag InputTag)
 		GetASC()->AbilityInputTagHeld(InputTag);
 		return;
 	}
-	if (bTargeting) GetASC()->AbilityInputTagHeld(InputTag);
+	if (bTargeting || bShiftPressed)
+	{
+		GetASC()->AbilityInputTagHeld(InputTag);
+	}
 	else
 	{
 		FollowTime += GetWorld()->GetDeltaSeconds();
@@ -138,6 +141,16 @@ void AAuraPlayerController::AbilityInputTagHeld(const FGameplayTag InputTag)
 			ControlledPawn->AddMovementInput(WorldDirection);
 		}
 	}
+}
+
+void AAuraPlayerController::ShiftPressed()
+{
+	bShiftPressed = true;
+}
+
+void AAuraPlayerController::ShiftReleased()
+{
+	bShiftPressed = false;
 }
 
 void AAuraPlayerController::MouseTrace()
@@ -189,6 +202,8 @@ void AAuraPlayerController::SetupInputComponent()
 	UAuraInputComponent* AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
 	AuraInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
 	AuraInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
+	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Started, this, &AAuraPlayerController::ShiftPressed);
+	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Completed, this, &AAuraPlayerController::ShiftReleased);
 }
 
 FVector AAuraPlayerController::GetRelativeVector(const EAxis::Type Axis) const
