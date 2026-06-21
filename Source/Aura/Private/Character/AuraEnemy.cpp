@@ -7,6 +7,8 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "Aura/Aura.h"
+#include "Components/WidgetComponent.h"
+#include "UI/Widget/AuraUserWidget.h"
 
 void AAuraEnemy::InitAbilitySystemComponent()
 {
@@ -23,6 +25,14 @@ void AAuraEnemy::InitializeCustomDepthForHighlight() const
 	Weapon->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 }
 
+void AAuraEnemy::InitializeHealthBarWidget()
+{
+	if (UAuraUserWidget* HealthBarWidget = Cast<UAuraUserWidget>(HealthBar->GetUserWidgetObject()))
+	{
+		HealthBarWidget->SetWidgetController(this);
+	}
+}
+
 void AAuraEnemy::InitAbilitySystemAndAttributeSet()
 {
 	check(AbilitySystemComponent);
@@ -37,6 +47,9 @@ AAuraEnemy::AAuraEnemy()
 	InitializeCustomDepthForHighlight();
 	InitAbilitySystemComponent();
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
+	
+	HealthBar = CreateDefaultSubobject<UWidgetComponent>(FName("HealthBarWidget"));
+	HealthBar->SetupAttachment(GetRootComponent());;
 }
 
 void AAuraEnemy::SetActivateCustomDepth(const bool bActive) const
@@ -46,12 +59,32 @@ void AAuraEnemy::SetActivateCustomDepth(const bool bActive) const
 	Weapon->SetRenderCustomDepth(bActive);
 }
 
+void AAuraEnemy::SetupHealthChangeDelegates() const
+{
+	const UAuraAttributeSet* AS = CastChecked<UAuraAttributeSet>(GetAttributeSet());
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AS->GetHealthAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnHealthChanged.Broadcast(Data.NewValue);
+		});
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AS->GetMaxHealthAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnMaxHealthChanged.Broadcast(Data.NewValue);
+		});
+	// Initial values
+	OnHealthChanged.Broadcast(AS->GetHealth());
+	OnMaxHealthChanged.Broadcast(AS->GetMaxHealth());
+}
+
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 
 	InitAbilitySystemAndAttributeSet();
-	
+	// Health Bar
+	InitializeHealthBarWidget();
+	SetupHealthChangeDelegates();
 }
 
 void AAuraEnemy::HighlightActor()

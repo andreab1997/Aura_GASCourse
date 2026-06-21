@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "Character/AuraCharacterBase.h"
 #include "Interactions/IHighlightable.h"
+#include "WidgetController/AuraOverlayWidgetController.h"
 #include "AuraEnemy.generated.h"
 
+class UWidgetComponent;
 /**
  * 
  */
@@ -25,6 +27,13 @@ public:
 	// Combat Interface
 	virtual int32 GetPlayerLevel() override;
 	// End Combat Interface
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnHealthChangedSignature OnHealthChanged;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnMaxHealthChangedSignature OnMaxHealthChanged;
+
 protected:
 	virtual void BeginPlay() override;
 private:
@@ -32,12 +41,17 @@ private:
  * Utilities
 */
 	void SetActivateCustomDepth(const bool bActive) const;
+	void SetupHealthChangeDelegates() const;
 	void InitAbilitySystemComponent();
 	void InitializeCustomDepthForHighlight() const;
+	void InitializeHealthBarWidget();
 
 protected:
 	virtual void InitAbilitySystemAndAttributeSet() override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
 	int32 Level = 1;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent> HealthBar;
 };
