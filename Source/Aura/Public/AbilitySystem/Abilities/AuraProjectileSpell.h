@@ -22,4 +22,7 @@ protected:
 	
 	UFUNCTION(BlueprintCallable, Category=Projectile)
 	void SpawnProjectile(const FVector& ProjectileTargetLocation) const;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
 };
