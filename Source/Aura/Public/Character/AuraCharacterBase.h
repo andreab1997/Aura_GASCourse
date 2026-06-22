@@ -52,11 +52,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")
 	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
 	
-	
-	void InitializePrimaryAttributes() const;
-	void InitializeSecondaryAttributes() const;
-	void InitializeVitalAttributes() const;
-	void InitializeDefaultAttributes() const;
+	virtual void InitializeDefaultAttributes() const;
 	
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;
 	
@@ -65,4 +61,8 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, Category = "Abilities", meta = (AllowPrivateAccess = "true"))
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
+	
+	void InitializePrimaryAttributes() const;
+	void InitializeSecondaryAttributes() const;
+	void InitializeVitalAttributes() const;
 };
