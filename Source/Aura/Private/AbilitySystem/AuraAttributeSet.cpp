@@ -77,7 +77,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 	Super::PostGameplayEffectExecute(Data);
 
 	// Data contains the info about the attribute that has been changed. For example,
-	// We collect here some info that we will use later on
+	// We collect here some info that we will use later on.
 	// This is also to show how to get different information from this struct
 	FEffectProperties EffectProperties;
 	
@@ -89,6 +89,20 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
 	if (Data.EvaluatedData.Attribute == GetManaAttribute())
 		SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
+	
+	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
+	{
+		const float LocalIncomingDamage = GetIncomingDamage();
+		SetIncomingDamage(0.f);
+		if (LocalIncomingDamage > 0.f)
+		{
+			const float NewHealth = GetHealth() - LocalIncomingDamage;
+			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
+			
+			const bool bFatal = NewHealth <= 0.f;
+		}
+	}
+		
 
 }
 
